@@ -1,26 +1,21 @@
 version: '3'
 services:
   flask:
-    # Путь до Dockerfile
-    build: ./
-    # Имя для создаваемого контейнера
+    build: ./deposit_service
     container_name: deposit_service
-    # Создание переменных окружения в контейнере
     environment:
-      # для отладки (при запуске в релиз убрать!)
+      # для отладки
       - FLASK_ENV=development
       ## Позволяет отслеживать процесс работы приложения в командной строке
       - PYTHONUNBUFFERED=True
       ##
     # Перезапускаем сервис в случае падения
     restart: on-failure
-    # Прокладывам путь для файлов. Все файлы, которые хранятся у вас в
-    # директории ./backend, появятся в директории контейнера /backend
+    # mapping
     volumes:
-      - ./deposit_service:/deposit_service
+      - ./:/deposit_service
     # Открываем порт в контейнер
     # Порт, который будет смотреть наружу : порт который используется внутри контейнера
     ports:
       - "5010:5010"
-    #command: gunicorn -w 4 -b 0.0.0.0:5010 app_gu:service_app
-    command: python deposit_service/deposit_service.py
+    command: gunicorn -w 4 -b 0.0.0.0:5010 app_gu:service_app
