@@ -1,0 +1,16 @@
+backports.entry-points-selectable==1.1.0
+certifi==2021.10.8
+click==8.0.3
+distlib==0.3.3
+filelock==3.3.2
+Flask==2.0.2
+gunicorn==20.1.0
+itsdangerous==2.0.1
+Jinja2==3.0.2
+MarkupSafe==2.0.1
+pipenv==2021.11.5.post0
+platformdirs==2.4.0
+six==1.16.0
+virtualenv==20.10.0
+virtualenv-clone==0.5.7
+Werkzeug==2.0.2

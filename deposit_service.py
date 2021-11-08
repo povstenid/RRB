@@ -1,5 +1,4 @@
-#!flask/bin/python
-from flask import Flask
+#!
 import app
-
-app.app.run()
+if __name__ == '__main__':
+    app.service_app.run()

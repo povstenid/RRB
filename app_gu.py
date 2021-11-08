@@ -55,3 +55,5 @@ def deposit_service():
     except:
         return jsonify({'error': 'unknown error in validation/calculation'}), 400
 
+if __name__ == '__main__':
+    service_app.run()
