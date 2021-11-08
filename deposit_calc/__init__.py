@@ -1,4 +1,3 @@
-
 """
 # Расчет депозитов
 """
@@ -7,8 +6,7 @@ import datetime
 import json
 from calendar import monthrange
 import traceback
-
-from pipenv.vendor.dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta
 
 
 
@@ -35,7 +33,7 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
         rate_min = in_limits['rate_min']
         rate_max = in_limits['rate_max']
     except:
-        error_code = "E100 - Limits load fail on validation - check config.py "  + traceback.format_exc()
+        error_code = "E100 - Limits load fail on validation - check config.py "
         val_error = True
 
 
