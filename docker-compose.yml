@@ -1,7 +1,7 @@
 version: '3'
 services:
   flask:
-    build: ./deposit_service
+    build: ./
     container_name: deposit_service
     environment:
       # для отладки

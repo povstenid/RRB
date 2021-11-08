@@ -130,7 +130,7 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
         # проверка на сумму вклада в рамках заданных лимитов
         if not val_error:
             if rate < rate_min or rate > rate_max:
-                error_code = 'E202 - Rate is out of boundaries '
+                error_code = f'E202 - Rate is out of boundaries {rate_min}< {rate}<{rate_max}'
                 val_error = True
 
     except:
