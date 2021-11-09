@@ -1,7 +1,6 @@
 import config
 import deposit_calc
 
-
 def test_default():
     amount = 10000
     periods = 7
