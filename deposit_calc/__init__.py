@@ -9,10 +9,10 @@ import traceback
 from dateutil.relativedelta import relativedelta
 
 
-def request_val_validate(depositDate, periods, amount, rate, in_limits) -> [bool, str]:
+def request_val_validate(depositdate, periods, amount, rate, in_limits) -> [bool, str]:
     '''
     Функция проверки ограничений
-    :param depositDate: Starting date for deposit
+    :param depositdate: Starting date for deposit
     :param periods: Количество периодов (месяцев)
     :param amount: Сумма вклада
     :param rate: Процентная ставка по вклад
@@ -96,7 +96,7 @@ def request_val_validate(depositDate, periods, amount, rate, in_limits) -> [bool
 
         # Дата депозита должна быть строкой формата dd.mm.YYYY
         if not val_error:
-            if not (isinstance(depositDate, str) and len(depositDate) == 10):
+            if not (isinstance(depositdate, str) and len(depositdate) == 10):
                 error_code = "E008 - depositdate is not well formed"
                 val_error = True
         val_pos = 8
@@ -105,7 +105,7 @@ def request_val_validate(depositDate, periods, amount, rate, in_limits) -> [bool
         if not val_error:
             try:
                 # преобразуем строку в дату, если выйдет - будем ее исрользовать дальше
-                deposit_date_conv = datetime.datetime.strptime(depositDate, '%d.%m.%Y').date()
+                deposit_date_conv = datetime.datetime.strptime(depositdate, '%d.%m.%Y').date()
             except:
                 error_code = "E009 - depositdate not real date"
                 val_error = True
@@ -157,10 +157,17 @@ def month_cap_calc(depositdate, periods, amount, rate) -> [bool, str]:
         # запись пойдет в список
         calculated = dict()
         deposit_date_conv = datetime.datetime.strptime(depositdate, '%d.%m.%Y').date()
+        deposit_day = deposit_date_conv.day
+
         for period_pos in range(1, periods + 1):
             # рассчитываем дату конца месяца
-            end_date = datetime.date(deposit_date_conv.year, deposit_date_conv.month,
-                                     monthrange(deposit_date_conv.year, deposit_date_conv.month)[1])
+
+            calculated_end_date = datetime.date(deposit_date_conv.year, deposit_date_conv.month,
+                                                monthrange(deposit_date_conv.year, deposit_date_conv.month)[1])
+            if deposit_day > calculated_end_date.day:
+                end_date = calculated_end_date
+            else:
+                end_date = datetime.date(deposit_date_conv.year, deposit_date_conv.month, deposit_day)
             amount = amount + amount * rate / (12 * 100)
             # провверим выход значения за разумные пределы
             if amount > 10E16:
