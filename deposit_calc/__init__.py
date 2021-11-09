@@ -9,7 +9,7 @@ import traceback
 from dateutil.relativedelta import relativedelta
 
 
-def request_val_validate(depositdate, periods, amount, rate, in_limits) -> [bool, str]:
+def request_val_validate(depositdate: str, periods: int, amount: int, rate: float, in_limits: dict) -> [bool, str]:
     '''
     Функция проверки ограничений
     :param depositdate: Starting date for deposit
@@ -141,7 +141,7 @@ def request_val_validate(depositdate, periods, amount, rate, in_limits) -> [bool
             return False, 'No errors'
 
 
-def month_cap_calc(depositdate, periods, amount, rate) -> [bool, str]:
+def month_cap_calc(depositdate: str, periods: int, amount: int, rate: float) -> [bool, str]:
     """
     Функция расчета депозита
     :param depositdate: дата заявки dd.mm.YYYY
