@@ -9,13 +9,14 @@ import traceback
 from dateutil.relativedelta import relativedelta
 
 
-
-def request_val_validate(depositDate,periods,amount,rate,in_limits):
+def request_val_validate(depositDate, periods, amount, rate, in_limits) -> [bool, str]:
     '''
     Функция проверки ограничений
+    :param depositDate: Starting date for deposit
     :param periods: Количество периодов (месяцев)
     :param amount: Сумма вклада
     :param rate: Процентная ставка по вклад
+    :param in_limits: dict with limits to check
     :return:  false/truе без ошибок/с ошибками, коды ошибок
     '''
 
@@ -24,7 +25,7 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
     error_code = 'E000 - No error'
     val_pos = 0
 
-    #проверяем входные значения настроек
+    # проверяем входные значения настроек
     try:
         period_max = in_limits['period_max']
         period_min = in_limits['period_min']
@@ -35,8 +36,6 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
     except:
         error_code = "E100 - Limits load fail on validation - check config.py "
         val_error = True
-
-
 
     # Основной набор проверок
     try:
@@ -64,7 +63,6 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
                 error_code = "E003 - Amount have more than 2 digits in decimal part"
                 val_error = True
         val_pos = 3
-
 
         # Количество месяцев должно быть целым положительным числом числом
         if not val_error:
@@ -99,7 +97,7 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
         # Дата депозита должна быть строкой формата dd.mm.YYYY
         if not val_error:
             if not (isinstance(depositDate, str) and len(depositDate) == 10):
-                error_code = "E008 - depositDate is not well formed"
+                error_code = "E008 - depositdate is not well formed"
                 val_error = True
         val_pos = 8
 
@@ -109,9 +107,8 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
                 # преобразуем строку в дату, если выйдет - будем ее исрользовать дальше
                 deposit_date_conv = datetime.datetime.strptime(depositDate, '%d.%m.%Y').date()
             except:
-                error_code = "E009 - depositDate not real date"
+                error_code = "E009 - depositdate not real date"
                 val_error = True
-
 
         # проверка на периоды в рамках заданных лимитов
         if not val_error:
@@ -137,46 +134,37 @@ def request_val_validate(depositDate,periods,amount,rate,in_limits):
 
     # Проеверяем, чем кончилась валидация. Если ошибки нет - продолжаем. Если есть - возвращем результат и выходим
     finally:
-        if val_error :
+        if val_error:
             # print (errorcode)
             return True, error_code
         else:
             return False, 'No errors'
 
 
-
-
-
-
-
-
-def month_cap_calc(depositDate,periods,amount,rate):
+def month_cap_calc(depositdate, periods, amount, rate) -> [bool, str]:
     """
     Функция расчета депозита
-    :param depositDate: дата заявки dd.mm.YYYY
+    :param depositdate: дата заявки dd.mm.YYYY
     :param periods: количество месяцев депозита
     :param amount: сумма депозита
     :param rate: процентная ставка
-    :return:
+    :return: false/truе без ошибок/с ошибками, result
     """
-    # Иницаализация встроенных переменных
-    deposit_date_conv=None
     # Проверка на валидность входных параметров не производится - используйте валидирующий декоратор
-
-
 
     try:
         # Считаем депозит по формуле из Excel.
         # запись пойдет в список
         calculated = dict()
-        deposit_date_conv = datetime.datetime.strptime(depositDate, '%d.%m.%Y').date()
+        deposit_date_conv = datetime.datetime.strptime(depositdate, '%d.%m.%Y').date()
         for period_pos in range(1, periods + 1):
             # рассчитываем дату конца месяца
             end_date = datetime.date(deposit_date_conv.year, deposit_date_conv.month,
                                      monthrange(deposit_date_conv.year, deposit_date_conv.month)[1])
             amount = amount + amount * rate / (12 * 100)
             # провверим выход значения за разумные пределы
-            if amount>10E16: raise TypeError
+            if amount > 10E16:
+                raise TypeError
             end_date_str = end_date.strftime('%d.%m.%Y')
             calculated.update({end_date_str: float("%10.2f" % amount)})
             deposit_date_conv = deposit_date_conv + relativedelta(months=1)

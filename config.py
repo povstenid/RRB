@@ -15,11 +15,5 @@
 )
 """
 
-deposit_limits=dict(
-    period_min=1,
-    period_max=60,
-    amount_min=10000,
-    amount_max=3000000,
-    rate_min=1.0,
-    rate_max=8.0,
-)
+deposit_limits = {'period_min': 1, 'period_max': 60, 'amount_min': 10000, 'amount_max': 3000000, 'rate_min': 1.0,
+                  'rate_max': 8.0}

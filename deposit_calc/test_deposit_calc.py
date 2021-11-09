@@ -73,8 +73,8 @@ def test_amount_format_wrong():
     periods=7
     rate=6.0
     depositDate='31.01.2021'
-    #print(deposit_calc.month_cap_calc(depositDate, periods, amount, rate))
-    #print( deposit_calc.request_val_validate(depositDate,periods,amount,rate,config.deposit_limits))
+    #print(deposit_calc.month_cap_calc(depositdate, periods, amount, rate))
+    #print( deposit_calc.request_val_validate(depositdate,periods,amount,rate,config.deposit_limits))
     assert deposit_calc.month_cap_calc(depositDate, periods, amount, rate)[0]==False
     assert  deposit_calc.request_val_validate(depositDate,periods,amount,rate,config.deposit_limits)[0]==True
 
